@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kayıt Ol</title>
+    <link rel="icon" href="/public/assets/proline.png">
+    <style>
+        body {
+            background-color: rgb(223, 243, 254);
+            font-family: Arial, sans-serif;
+        }
+
+        #header {
+            background-color: rgb(44, 45, 49);
+            border-radius: 10px;
+            height: auto;
+            width: 300px;
+            margin: auto;
+            margin-top: 100px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        #name, #password, #city {
+            width: calc(100% - 22px);
+            height: 40px;
+            padding: 10px;
+            border-radius: 20px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        #singUp {
+            width: 100%;
+            height: 46px;
+            background-color: rgb(223, 243, 254);
+            border-radius: 20px;
+            padding: 10px 0;
+            color: rgb(44, 45, 49);
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        #logo {
+            display: block;
+            margin: 0 auto 20px;
+            height: 80px;
+        }
+
+        #navigation {
+            margin-bottom: 20px;
+        }
+
+        #navigation a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 0 10px;
+        }
+
+        #navigation a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="header">
+        <img id="logo" src="../../assets/proline.png" alt="Logo">
+        <div id="navigation">
+            <a href="spotify.html">SING IN</a>
+            <a href="sıngup.html">SING UP</a>
+        </div>
+        <form id="userForm">
+            <input id="name" type="text" placeholder="Kullanıcı Adı" required>
+            <input id="password" type="password" placeholder="Şifre" required>
+            <input id="city" type="text" placeholder="Şehir" required>
+            <button id="singUp" type="submit"><strong>KAYDOL</strong></button>
+        </form>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro-Line Hava Bülteni</title>
+    <link rel="icon" href="/public/assets/proline.png">
+    <style>
+        body {
+            background-color: rgb(223, 243, 254);
+            font-family: Arial, sans-serif;
+        }
+
+        #header {
+            background-color: rgb(44, 45, 49);
+            border-radius: 10px;
+            width: 300px;
+            margin: 100px auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        #name, #password {
+            width: calc(100% - 22px);
+            height: 40px;
+            padding: 10px;
+            border-radius: 20px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        #singIn {
+            width: 100%;
+            height: 46px;
+            background-color: rgb(223, 243, 254);
+            border-radius: 20px;
+            padding: 10px 0;
+            color: rgb(44, 45, 49);
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        #logo {
+            height: 80px;
+            margin-bottom: 20px;
+        }
+
+        #checkbox {
+            color: white;
+            margin: 10px 0;
+        }
+
+        #checkbox label {
+            font-family: Arial, sans-serif;
+        }
+
+        #unuttum a {
+            color: rgb(105, 106, 109);
+            text-decoration: none;
+            font-family: Arial, sans-serif;
+        }
+
+        #unuttum a:hover {
+            text-decoration: underline;
+        }
+
+        #kalmadi a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 0 10px;
+        }
+
+        #kalmadi a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="header">
+        <img id="logo" src="../../assets/proline.png" alt="Logo">
+        <div id="kalmadi">
+            <strong>
+                <a href="spotify.html">SIGN IN</a>
+                <a href="sıngup.html">SIGN UP</a>
+            </strong>
+        </div>
+        <input id="name" type="text" placeholder="Username">
+        <input id="password" type="password" placeholder="Password">
+        <div id="checkbox">
+            <label><input type="checkbox"> Remember Me</label>
+        </div>
+        <div id="button">
+            <button id="singIn"><strong>SIGN IN</strong></button>
+        </div>
+        <div id="unuttum">
+            <a href="#" onclick="unuttum()"><strong>Forgot Your Password</strong></a>
+        </div>
+    </div>
+
+    <script>
+        let spotifyUsers = [];
+
+        async function loadUsers() {
+            try {
+                const response = await fetch('http://localhost:3000/get-users');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                
+                if (Array.isArray(data.users)) {
+                    spotifyUsers = data.users;
+                } else {
+                    console.error('Veri dizisi formatında değil:', data);
+                }
+            } catch (error) {
+                console.error('Error loading users:', error);
+            }
+        }
+
+        function kontrol() {
+            const girilenAd = document.getElementById("name").value;
+            const girilenSifre = document.getElementById("password").value;
+            return spotifyUsers.some(user => user.name === girilenAd && user.password === girilenSifre);
+        }
+
+        async function onay() {
+            await loadUsers();
+            if (kontrol()) {
+                window.location.href = "havaDurumu.html";
+                document.getElementById("name").value = "";
+                document.getElementById("password").value = "";
+            } else {
+                alert("Hatalı kullanıcı adı veya parola.");
+                document.getElementById("name").value = "";
+                document.getElementById("password").value = "";
+            }
+        }
+
+        document.getElementById('singIn').addEventListener('click', onay);
+
+        function unuttum() {
+            alert("Parolanızı sıfırlama bağlantısı e-posta adresinize gönderilmiştir.");
+        }
+    </script>
+</body>
+</html>

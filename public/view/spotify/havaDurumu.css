@@ -1,0 +1,72 @@
+body{
+    background-color: rgb(147, 255, 237);
+
+}
+#baslik{
+    background-color: rgb(0, 140, 255);
+    text-align: center;
+    height: 80px;
+    padding-top: 20px;
+    border-radius: 10px;
+}
+#gun1{
+    float: right;
+    width: 45%;
+    height: 220px;
+    border-radius: 10px;
+    background-color: blue;
+    font-size: large;
+    flex-wrap: wrap;
+}
+.buttons{
+    background-color: brgb(66, 255, 224);
+    float: left;
+    width: 30%;
+    border-radius: 10px;
+    margin: 15px;
+    
+}
+#search{
+    margin-top: 10px;
+    background-color: blue;
+    color: white;
+    width: 358px;
+    height: 40px;
+    border-radius: 5px;
+}
+#lokasyon{
+    margin-top: 20px;
+    background-color: gray;
+    color: white;
+    width: 358px;
+    height: 40px;
+    border-radius: 5px;
+}
+#arama{
+    width: 350px;
+    height: 30px;
+    border-radius: 5px;
+}
+#forecast{
+    
+    background-color: blue;
+   
+
+}
+#digerGunler{
+    display: flex;
+    flex-wrap: nowrap;   
+    gap: 100px;
+    
+    
+    
+    
+}
+#forecastt{
+    height: 50%;
+    
+    
+}
+    
+  
+
