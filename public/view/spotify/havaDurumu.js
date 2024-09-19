@@ -14,22 +14,20 @@ const userNameInput = document.getElementById('userName');
 const userPasswordInput = document.getElementById('userPassword');
 const userCityInput = document.getElementById('userCity');
 const rowIndexInput = document.getElementById('rowIndex');
-const tablinks = document.getElementsByClassName('tablinks');
 const konumButton = document.getElementById('konum');
 const locationInfo = document.getElementById('locationInfo');
-
 
 // API ve URL tanımları
 const api = 'dc3fec87a21040aca3671922241109';
 const url = 'https://api.weatherapi.com/v1/forecast.json';
-const usersUrl = '/data/spotifyUsers.json';
+const usersUrl = 'http://localhost:3000/get-users';
 const deleteUserUrl = 'http://localhost:3000/delete-user/';
-const updateUserUrl = 'http://localhost:3000/update-user/';
+const updateUserUrl = 'http://localhost:3000/update-user';
 
 // Sayfa yüklendiğinde hava durumu tabını aç ve varsayılan şehir verilerini yükle
 window.onload = function () {
-    document.querySelector('.tablinks').click(); // sayfa yüklenince hava durumu sekmesini aç
-    fetchWeatherData('istanbul'); // Sayfa yüklendiğinde varsayılan olarak İstanbul verisini çekme
+    document.querySelector('.tablinks').click();
+    fetchWeatherData('istanbul');
 };
 
 // Hava durumu verilerini çekme
@@ -38,28 +36,24 @@ async function fetchWeatherData(city) {
         const response = await fetch(`${url}?key=${api}&q=${city}&days=5`);
         if (!response.ok) throw new Error('Şehir bulunamadı');
         const data = await response.json();
-      
-        
 
         sehirİsim.textContent = `${data.location.name}`;
         sicaklik.textContent = `Temp: ${data.current.temp_c}°C`;
         condition.src = data.current.condition.icon.startsWith('//') ? 'https:' + data.current.condition.icon : data.current.condition.icon;
         humidity.textContent = `Humidity: ${data.current.humidity}%`;
         wind.textContent = `Wind: ${data.current.wind_kph} km/h`;
-        const dayDiv = document.createElement('div');
-        dayDiv.classList.add('bugun');
-
 
         digerGunler.innerHTML = '';
         data.forecast.forecastday.slice(1).forEach(day => {
             const dayDiv = document.createElement('div');
             dayDiv.classList.add('forecastt');
             let backgroundImage;
+
             switch (day.day.condition.text.toLowerCase()) {
                 case 'sunny':
                     backgroundImage = 'url(/public/assets/sea.jpg)';
                     break;
-                case 'partly cloudy ':
+                case 'partly cloudy':
                     backgroundImage = 'url(/public/assets/sky.jpg)';
                     break;
                 case 'moderate rain':
@@ -87,7 +81,6 @@ async function fetchWeatherData(city) {
                 <p>Humidity: ${day.day.avghumidity}%</p>
                 <p>Wind: ${day.day.maxwind_kph} km/h</p>
             `;
-
             digerGunler.appendChild(dayDiv);
         });
     } catch (error) {
@@ -104,7 +97,6 @@ async function fetchWeatherData(city) {
 searchButton.addEventListener('click', () => {
     const city = arama.value;
     fetchWeatherData(city);
-
 });
 
 // Kullanıcı konumunu al
@@ -113,7 +105,6 @@ konumButton.addEventListener('click', () => {
         navigator.geolocation.getCurrentPosition(async (position) => {
             const { latitude, longitude } = position.coords;
             locationInfo.textContent = `Lat: ${latitude.toFixed(2)}, Lon: ${longitude.toFixed(2)}`;
-            // Konumu kullanarak hava durumu verilerini al
             const response = await fetch(`${url}?key=${api}&q=${latitude},${longitude}&days=5`);
             if (!response.ok) {
                 locationInfo.textContent = 'Hava durumu alınamadı.';
@@ -121,7 +112,6 @@ konumButton.addEventListener('click', () => {
             }
             const data = await response.json();
             sehirİsim.textContent = `${data.location.name}`;
-
             sicaklik.textContent = `Temp: ${data.current.temp_c}°C`;
             condition.src = data.current.condition.icon.startsWith('//') ? 'https:' + data.current.condition.icon : data.current.condition.icon;
             humidity.textContent = `Humidity: ${data.current.humidity}%`;
@@ -129,34 +119,34 @@ konumButton.addEventListener('click', () => {
 
             digerGunler.innerHTML = '';
             data.forecast.forecastday.slice(1).forEach(day => {
-                
                 const dayDiv = document.createElement('div');
-            dayDiv.classList.add('forecastt');
-            let backgroundImage;
-            console.log("day ", day)
-            switch (day.day.condition.text.toLowerCase()) {
-                case 'sunny':
-                    backgroundImage = 'url(/public/assets/sea.jpg)';
-                    break;
-                case 'partly cloudy ':
-                    backgroundImage = 'url(/public/assets/sky.jpg)';
-                    break;
-                case 'moderate rain':
-                    backgroundImage = 'url(/public/assets/lightning6.jpg)';
-                    break;
-                case 'patchy rain nearby':
-                    backgroundImage = 'url(/public/assets/yer.jpg)';
-                    break;
-                case 'snow':
-                    backgroundImage = 'url(/public/assets/winter.jpg)';
-                    break;
-                default:
-                    backgroundImage = 'url(/public/assets/seea.jpg)';
-            }
-            dayDiv.style.backgroundImage = backgroundImage;
-            dayDiv.style.backgroundSize = 'cover';
-            dayDiv.style.color = 'white';
-            dayDiv.style.borderRadius = '20px';
+                dayDiv.classList.add('forecastt');
+                let backgroundImage;
+
+                switch (day.day.condition.text.toLowerCase()) {
+                    case 'sunny':
+                        backgroundImage = 'url(/public/assets/sea.jpg)';
+                        break;
+                    case 'partly cloudy':
+                        backgroundImage = 'url(/public/assets/sky.jpg)';
+                        break;
+                    case 'moderate rain':
+                        backgroundImage = 'url(/public/assets/lightning6.jpg)';
+                        break;
+                    case 'patchy rain nearby':
+                        backgroundImage = 'url(/public/assets/yer.jpg)';
+                        break;
+                    case 'snow':
+                        backgroundImage = 'url(/public/assets/winter.jpg)';
+                        break;
+                    default:
+                        backgroundImage = 'url(/public/assets/seea.jpg)';
+                }
+                dayDiv.style.backgroundImage = backgroundImage;
+                dayDiv.style.backgroundSize = 'cover';
+                dayDiv.style.color = 'white';
+                dayDiv.style.borderRadius = '20px';
+
                 dayDiv.innerHTML = `
                     <h4>${new Date(day.date).toLocaleDateString()}</h4>
                     <img src="${day.day.condition.icon.startsWith('//') ? 'https:' + day.day.condition.icon : day.day.condition.icon}" alt="${day.day.condition.text}" />
@@ -196,19 +186,13 @@ async function loadUserList() {
                 <td>${user.password}</td>
                 <td>${user.city}</td>
                 <td>
-                    <button class="updatebtn" data-id="${user.id}" data-index="${index}"style="border-radius:5px;background-color:rgb(74, 115, 248);color:#fff;"><strong>Edit</strong></button>
+                    <button class="updatebtn" data-id="${user.id}" data-index="${index}" style="border-radius:5px;background-color:rgb(74, 115, 248);color:#fff;"><strong>Edit</strong></button>
                     <button class="deletebtn" data-id="${user.id}" style="border-radius:5px;background-color:rgb(106, 117, 126);color:#fff;"><strong>Delete</strong></button>
                 </td>
             `;
             tbody.appendChild(row);
         });
 
-        document.querySelectorAll('.deletebtn').forEach(button => {
-            button.addEventListener('click', function () {
-                const userId = this.getAttribute('data-id');
-                deleteUser(userId);
-            });
-        });
 
         document.querySelectorAll('.updatebtn').forEach(button => {
             button.addEventListener('click', function () {
@@ -218,6 +202,16 @@ async function loadUserList() {
             });
         });
 
+        document.querySelectorAll('.deletebtn').forEach(button => {
+            button.addEventListener('click', function () {
+                const userId = this.getAttribute('data-id');
+                deleteUser(userId);
+                
+            });
+        });
+
+
+
     } catch (error) {
         const tbody = userTable.querySelector('tbody');
         tbody.innerHTML = `<tr><td colspan="5">Kullanıcı listesi yüklenemedi: ${error.message}</td></tr>`;
@@ -226,21 +220,21 @@ async function loadUserList() {
 
 // Kullanıcıyı silme fonksiyonu
 async function deleteUser(userId) {
+    console.log('Silinmek istenen kullanıcı ID:', userId); // Konsola yazdır
     try {
-        const url = `${deleteUserUrl}${userId}`;
-        const response = await fetch(url, {
-            method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' }
+        const response = await fetch(`${deleteUserUrl}${userId}`, {
+            method: 'DELETE'
         });
         if (!response.ok) throw new Error('Kullanıcı silinemedi');
 
         alert('Kullanıcı başarıyla silindi');
-        loadUserList(); // Kullanıcı silindikten sonra listeyi yeniden yüklemek için
+        loadUserList(); // Listeyi güncelle
     } catch (error) {
         console.error('Hata:', error);
         alert('Bir hata oluştu. Lütfen tekrar deneyin.');
     }
 }
+
 
 // Kullanıcıyı güncelleme fonksiyonu
 async function updateUser(user) {
@@ -289,7 +283,7 @@ updateUserForm.addEventListener('submit', function (event) {
     event.preventDefault();
 
     const user = {
-        id: userIdInput.value,
+        id: parseInt(userIdInput.value, 10), // ID'yi sayı olarak kullan
         name: userNameInput.value,
         password: userPasswordInput.value,
         city: userCityInput.value
@@ -310,7 +304,5 @@ function openTab(evt, tabName) {
     evt.currentTarget.className += " active";
 }
 
-
-// Kullanıcı listelerini yüklemek
+// Kullanıcı listelerini yüklemek için buton olay dinleyicisi
 document.querySelector('button[onclick="openTab(event, \'kullaniciListesi\')"]').addEventListener('click', loadUserList);
-

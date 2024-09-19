@@ -48,8 +48,40 @@ app.use((err, req, res, next) => {
 app.get('/get-users', (req, res) => {
     res.json({ users: spotifyUsers });
 });
+app.post('/add-user', (req, res) => {
+    const newUser = req.body;
+    console.log('Yeni kullanıcı:', newUser);
+    res.status(201).send('Kullanıcı başarıyla eklendi');
+});
+
+// Kullanıcı silme
+app.delete('/delete-user/:id', (req, res) => {
+    const userId = parseInt(req.params.id);
+    const initialLength = spotifyUsers.length;
+
+    // Belirtilen ID'ye sahip kullanıcıyı filtrele
+    spotifyUsers = spotifyUsers.filter(user => user.id !== userId);
+     
+
+    // Kullanıcı silinip silinmediğini kontrol et
+    if (spotifyUsers.length < initialLength) {
+        saveUsers(); // Kullanıcı silindi, verileri kaydet
+        return res.status(200).json({ message: 'Kullanıcı başarıyla silindi.' });
+    } else {
+        return res.status(404).json({ message: 'Kullanıcı bulunamadı.' });
+    }
+});
 
 
+
+function saveUsers() {
+    const data = JSON.stringify({ users: spotifyUsers, id: id }, null, 2);
+    fs.writeFile(dataFilePath, data, (err) => {
+        if (err) {
+            console.error('Veri kaydedilirken hata oluştu:', err);
+        }
+    });
+}
 const port = 3000;
 app.listen(port, () => {
     console.log(`Sunucu http://localhost:${port}/ adresinde çalışıyor.`);
